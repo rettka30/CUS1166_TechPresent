@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>Subjects</title>
+  <head>
+  <body>
+    <h1>Hello, Friend!</h1>
+    {% for subject in subjects %}
+    <ul>
+      <li>
+        <a href="{{ url_for('subject_detail', subject_id=subject.id) }}">
+                  {{course.course_title}} {{course.course_number}}
+        </a>
+      </li>
+    </ul>
+  {% endfor %}
+  </body>
+</html>

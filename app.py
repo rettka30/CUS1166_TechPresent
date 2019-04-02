@@ -1,5 +1,5 @@
 import sys
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from flask_socketio import SocketIO, send
 from flask_sqlalchemy import SQLAlchemy
 from models import *
@@ -27,10 +27,16 @@ def handleMessage(msg):
 def index():
     return render_template('index.html')
 
-@app.route('/better')
-def better():
-    messages = History.query.all()
-    return render_template('better.html', messages=messages)
+@app.route('/subjects')
+def subjects():
+    subjects = Subject.query.all()
+    return render_template('subject.html', subjects=subjects)
+
+@app.route('/subject/<int:subject_id>')
+def subject_detail(subject_id):
+    subject = Subject.query.get(subject_id)
+    messages = subject.message
+    return render_template('better.html', subject=subject, messages=messages)
 
 def main():
     if (len(sys.argv)==2):
