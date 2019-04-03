@@ -12,10 +12,10 @@ db.init_app(app)
 
 users = {}
 
-@socketio.on('message')
-def handleMessage(msg):
-    print('Message: ' + str(msg))
-    send(msg, broadcast=True)
+# @socketio.on('message')
+# def handleMessage(msg):
+#     print('Message: ' + str(msg))
+#     send(msg, broadcast=True)
 
 @socketio.on('username', namespace='/private')
 def receive_username(username):
@@ -29,13 +29,13 @@ def private_message(payload):
 
     emit('new_private_message', message, room=recipient_session_id)
 
-# @socketio.on('message')
-# def handleMessage(msg):
-#     print('Message: ' + str(msg))
-#     message = History(message=msg)
-#     db.session.add(message)
-#     db.session.commit()
-#     send(msg, broadcast=True)
+@socketio.on('message')
+def handleMessage(msg):
+    print('Message: ' + str(msg))
+    message = History(message=msg)
+    db.session.add(message)
+    db.session.commit()
+    send(msg, broadcast=True)
 
 @app.route('/')
 def index():
@@ -45,10 +45,10 @@ def index():
 def private():
     return render_template("private.html")
 
-# @app.route('/live')
-# def live():
-#     messages = History.query.all()
-#     return render_template('better.html', messages=messages)
+@app.route('/live')
+def live():
+    messages = History.query.all()
+    return render_template('better.html', messages=messages)
 
 def main():
     if (len(sys.argv)==2):
