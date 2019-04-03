@@ -1,9 +1,11 @@
 import sys
-from flask import Flask, render_template, url_for
-from flask_socketio import SocketIO, send
+from flask import Flask, render_template, url_for, request
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
 from models import *
 from config import Config
+
+subjects = {}
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -27,16 +29,10 @@ def handleMessage(msg):
 def index():
     return render_template('index.html')
 
-@app.route('/subjects')
-def subjects():
-    subjects = Subject.query.all()
-    return render_template('subject.html', subjects=subjects)
-
-@app.route('/subject/<int:subject_id>')
-def subject_detail(subject_id):
-    subject = Subject.query.get(subject_id)
-    messages = subject.message
-    return render_template('better.html', subject=subject, messages=messages)
+@app.route('/live')
+def live():
+    messages = History.query.all()
+    return render_template('better.html', messages=messages)
 
 def main():
     if (len(sys.argv)==2):

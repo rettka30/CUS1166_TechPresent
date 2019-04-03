@@ -3,6 +3,7 @@
     <title>Chat Room</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/comments.css">
   </head>
   <body>
     <script type="text/javascript">
@@ -12,7 +13,7 @@
           socket.send('User has connected!');
         });
         socket.on('message', function(msg) {
-          $("#messages").append('<li>'+msg+'</li>');
+          $("#messages").append('<li id=mess>'+msg+'</li>');
           console.log('Received message');
         });
         $('#sendbutton').on('click', function() {
@@ -21,13 +22,18 @@
         });
       });
     </script>
-    <h1 id='subject'>{{subject}}</h1>
-    <ul id="messages">
-      {% for msg in messages %}
-        <li>{{ msg.message }}</li>
-      {% endfor %}
-    </ul>
-    <input type="text" id="myMessage">
-    <button id="sendbutton">Send</button>
+    <div class="container">
+      <div class="row">
+        <ul style="list-style-type:none;" id="messages">
+          {% for msg in messages %}
+            <li id="sent">{{ msg.message }}</li>
+          {% endfor %}
+        </ul>
+        <div class="column">
+          <input type="text" id="myMessage" placeholder="Message...">
+          <button id="sendbutton">Send</button>
+        </div>
+    </div>
+  </div>
   </body>
 </html>
